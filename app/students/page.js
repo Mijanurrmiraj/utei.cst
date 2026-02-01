@@ -3,19 +3,19 @@ export default function StudentsPage() {
     {
       name: "Mijanur Rahman Miraj",
       batch: "2022–2023",
-      roll: "CST-101",
+      roll: "703669",
       image: "/students/student1.jpg",
     },
     {
       name: "Manik Islam",
       batch: "2022–2023",
-      roll: "CST-102",
+      roll: "703685",
       image: "/students/student2.jpg",
     },
     {
       name: "Sadia akter",
       batch: "2023–2024",
-      roll: "CST-201",
+      roll: "703669",
       image: "/students/student3.jpg",
     },
   ];
