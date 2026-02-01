@@ -1,15 +1,15 @@
 export default function TeachersPage() {
   const teachers = [
     {
-      name: "Engr. Robiul Islam",
+      name: "Masud Rana Babu",
       designation: "Head of Computer Department",
       qualification: "BSc in CSE",
       image: "/teachers/teacher1.jpg",
     },
     {
-      name: "Masud Rana Babu",
+      name: "Engr. Robiul Islam",
       designation: "Instructor (Computer)",
-      qualification: "Diploma in Computer",
+      qualification: "BSC in CSE",
       image: "/teachers/teacher2.jpg",
     },
     {
