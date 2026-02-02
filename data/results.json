@@ -1,0 +1,15 @@
+[
+  {
+    "roll": "101",
+    "registration": "UTEI-2023-001",
+    "name": "Rahim Uddin",
+    "department": "Computer",
+    "session": "2023-24",
+    "exam": "1st Semester",
+    "published": true,
+    "subjects": [
+      { "name": "Programming", "theory": 70, "practical": 25 },
+      { "name": "Web Design", "theory": 65, "practical": 30 }
+    ]
+  }
+]
