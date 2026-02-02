@@ -44,19 +44,19 @@ export default function HomePage() {
       <section className="py-10 bg-gray-100">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-2xl font-bold text-green-700">500+</h3>
-            <p>Students</p>
+            <h3 className="text-2xl font-bold text-green-700">80+</h3>
+            <p>Student</p>
           </div>
           <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-2xl font-bold text-green-700">20+</h3>
+            <h3 className="text-2xl font-bold text-green-700">8+</h3>
             <p>Teachers</p>
           </div>
           <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-2xl font-bold text-green-700">3</h3>
+            <h3 className="text-2xl font-bold text-green-700">1</h3>
             <p>Computer Labs</p>
           </div>
           <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-2xl font-bold text-green-700">95%</h3>
+            <h3 className="text-2xl font-bold text-green-700">100%</h3>
             <p>Success Rate</p>
           </div>
         </div>
@@ -105,6 +105,9 @@ export default function HomePage() {
             <h3 className="text-xl font-bold mb-2 text-green-700">
               Message from Head of Department
             </h3>
+              <h2 className="text-xl font-bold mb-2 text-green-700">
+              Masud Rana Babu
+            </h2>
             <p>
               Our goal is to build skilled computer professionals with strong
               ethical values and technical expertise.
