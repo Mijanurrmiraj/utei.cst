@@ -1,8 +1,8 @@
 [
   {
-    "roll": "101",
-    "name": "Rahim Uddin",
-    "session": "2023-24",
+    "roll": "703669",
+    "name": "Mijanur Rahman Miraj",
+    "session": "2022-23",
     "subjects": [
       { "name": "Programming", "theory": 70, "practical": 25 },
       { "name": "Web Design", "theory": 65, "practical": 30 }
