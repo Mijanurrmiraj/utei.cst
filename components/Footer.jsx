@@ -10,7 +10,8 @@ export default function Footer() {
           </h3>
           <p className="mt-2 text-sm">
             Computer Department <br />
-            New Town 4, Sadar,Dinajpur, Bangladesh
+            Faridpur Goresthan Mor, New Town 4
+            Sadar, Dinajpur, Bangladesh
           </p>
         </div>
 
@@ -57,7 +58,7 @@ export default function Footer() {
             Developer
           </h3>
           <p className="text-sm">
-            Developed by{"Miraj "}
+            Developed by{" "}
             <a
               href="https://www.facebook.com/Mijanurrmiraj/"
               target="_blank"
