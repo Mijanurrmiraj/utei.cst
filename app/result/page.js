@@ -1,16 +1,29 @@
 "use client";
 import { useState } from "react";
-import results from "@/data/results.json";
 
 export default function ResultPage() {
   const [roll, setRoll] = useState("");
-  const [data, setData] = useState(null);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
 
-  const searchResult = () => {
-    const found = results.find(
-      r => r.roll === roll && r.published === true
-    );
-    setData(found || "not-found");
+  const searchResult = async () => {
+    setError("");
+    setResult(null);
+
+    try {
+      const res = await fetch("/data/results.json");
+      const data = await res.json();
+
+      const found = data.find(r => r.roll === roll);
+
+      if (!found) {
+        setError("Result not found");
+      } else {
+        setResult(found);
+      }
+    } catch (err) {
+      setError("Result loading error");
+    }
   };
 
   return (
@@ -32,15 +45,13 @@ export default function ResultPage() {
         Search Result
       </button>
 
-      {data === "not-found" && (
-        <p className="text-red-600 mt-4">Result not found</p>
-      )}
+      {error && <p className="text-red-600 mt-4">{error}</p>}
 
-      {data && data !== "not-found" && (
+      {result && (
         <div className="mt-6 text-left border p-4 rounded">
-          <p><b>Name:</b> {data.name}</p>
-          <p><b>Roll:</b> {data.roll}</p>
-          <p><b>Session:</b> {data.session}</p>
+          <p><b>Name:</b> {result.name}</p>
+          <p><b>Roll:</b> {result.roll}</p>
+          <p><b>Session:</b> {result.session}</p>
 
           <table className="w-full mt-4 border">
             <thead>
@@ -51,7 +62,7 @@ export default function ResultPage() {
               </tr>
             </thead>
             <tbody>
-              {data.subjects.map((s, i) => (
+              {result.subjects.map((s, i) => (
                 <tr key={i}>
                   <td className="border p-2">{s.name}</td>
                   <td className="border p-2">{s.theory}</td>
