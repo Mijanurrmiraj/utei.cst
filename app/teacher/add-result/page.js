@@ -7,10 +7,29 @@ export default function AddResult() {
   const [subject, setSubject] = useState("");
   const [marks, setMarks] = useState("");
 
-  const handleSubmit = () => {
-    alert(
-      `Result Added\nRoll: ${roll}\nName: ${name}\nSubject: ${subject}\nMarks: ${marks}`
-    );
+  const handleSave = () => {
+    if (!roll || !subject || !marks) {
+      alert("All fields required");
+      return;
+    }
+
+    const existing = JSON.parse(localStorage.getItem("results")) || [];
+
+    existing.push({
+      roll,
+      name,
+      subject,
+      marks,
+    });
+
+    localStorage.setItem("results", JSON.stringify(existing));
+
+    alert("Result Saved Successfully ✅");
+
+    setRoll("");
+    setName("");
+    setSubject("");
+    setMarks("");
   };
 
   return (
@@ -48,7 +67,7 @@ export default function AddResult() {
       />
 
       <button
-        onClick={handleSubmit}
+        onClick={handleSave}
         className="bg-green-700 text-white w-full p-3 rounded"
       >
         Save Result
