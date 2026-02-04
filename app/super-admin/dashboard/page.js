@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -10,11 +9,8 @@ export default function SuperAdminDashboard() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const ok = localStorage.getItem("superAdminLogin");
-    if (!ok) router.push("/super-admin/login");
-
-    const saved = JSON.parse(localStorage.getItem("officeAdmins")) || [];
-    setAdmins(saved);
+    const data = JSON.parse(localStorage.getItem("officeAdmins")) || [];
+    setAdmins(data);
   }, []);
 
   const addAdmin = () => {
@@ -26,8 +22,10 @@ export default function SuperAdminDashboard() {
     const updated = [...admins, { username, password }];
     setAdmins(updated);
     localStorage.setItem("officeAdmins", JSON.stringify(updated));
+
     setUsername("");
     setPassword("");
+    alert("Office Admin Added");
   };
 
   const deleteAdmin = (index) => {
@@ -36,61 +34,57 @@ export default function SuperAdminDashboard() {
     localStorage.setItem("officeAdmins", JSON.stringify(updated));
   };
 
-  const logout = () => {
-    localStorage.removeItem("superAdminLogin");
-    router.push("/super-admin/login");
-  };
-
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
+    <div className="p-4 max-w-md mx-auto">
+      <div className="bg-green-700 text-white p-4 rounded-xl flex justify-between items-center">
         <div>
-          <h2>Super Admin Dashboard</h2>
-          <p>Full system control panel</p>
+          <h2 className="text-lg font-bold">Super Admin Dashboard</h2>
+          <p className="text-sm opacity-90">Full system control</p>
         </div>
-        <button onClick={logout} style={styles.logout}>Logout</button>
+        <button
+          onClick={() => {
+            localStorage.removeItem("superAdmin");
+            router.push("/super-admin/login");
+          }}
+          className="bg-white text-green-700 px-4 py-2 rounded"
+        >
+          Logout
+        </button>
       </div>
 
-      {/* Summary Cards */}
-      <div style={styles.cards}>
-        <Card title="Office Admins" value={admins.length} />
-        <Card title="Teachers" value="—" />
-        <Card title="Students" value="—" />
+      <div className="mt-4 bg-white p-4 rounded-xl shadow">
+        <h3 className="font-semibold mb-2">Create Office Admin</h3>
+        <input
+          className="w-full border p-2 rounded mb-2"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          className="w-full border p-2 rounded mb-2"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          onClick={addAdmin}
+          className="w-full bg-green-700 text-white py-2 rounded"
+        >
+          Add Admin
+        </button>
       </div>
 
-      {/* Create Admin */}
-      <div style={styles.section}>
-        <h3>Create Office Admin</h3>
-        <div style={styles.form}>
-          <input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={styles.input}
-          />
-          <input
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-          />
-          <button onClick={addAdmin} style={styles.btn}>Add Admin</button>
-        </div>
-      </div>
-
-      {/* Admin List */}
-      <div style={styles.section}>
-        <h3>Office Admin List</h3>
-
-        {admins.length === 0 && (
-          <p style={{ color: "#777" }}>No office admin created yet.</p>
-        )}
-
+      <div className="mt-4 bg-white p-4 rounded-xl shadow">
+        <h3 className="font-semibold mb-2">Office Admin List</h3>
+        {admins.length === 0 && <p>No admins</p>}
         {admins.map((a, i) => (
-          <div key={i} style={styles.listItem}>
+          <div key={i} className="flex justify-between mb-2">
             <span>{a.username}</span>
-            <button onClick={() => deleteAdmin(i)} style={styles.delete}>
+            <button
+              onClick={() => deleteAdmin(i)}
+              className="bg-red-500 text-white px-3 rounded"
+            >
               Delete
             </button>
           </div>
@@ -99,89 +93,3 @@ export default function SuperAdminDashboard() {
     </div>
   );
 }
-
-function Card({ title, value }) {
-  return (
-    <div style={styles.card}>
-      <h4>{title}</h4>
-      <p>{value}</p>
-    </div>
-  );
-}
-
-const styles = {
-  page: {
-    padding: 16,
-    background: "#f4f7f6",
-    minHeight: "100vh",
-  },
-  header: {
-    background: "#1b7f3a",
-    color: "#fff",
-    padding: 16,
-    borderRadius: 12,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  logout: {
-    background: "#fff",
-    color: "#1b7f3a",
-    border: "none",
-    padding: "8px 14px",
-    borderRadius: 6,
-    fontWeight: "bold",
-  },
-  cards: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-    gap: 12,
-    marginTop: 16,
-  },
-  card: {
-    background: "#fff",
-    padding: 16,
-    borderRadius: 10,
-    textAlign: "center",
-    boxShadow: "0 4px 10px rgba(0,0,0,.08)",
-  },
-  section: {
-    background: "#fff",
-    marginTop: 20,
-    padding: 16,
-    borderRadius: 12,
-    boxShadow: "0 4px 10px rgba(0,0,0,.06)",
-  },
-  form: {
-    display: "grid",
-    gap: 10,
-    marginTop: 10,
-  },
-  input: {
-    padding: 10,
-    borderRadius: 6,
-    border: "1px solid #ccc",
-  },
-  btn: {
-    background: "#1b7f3a",
-    color: "#fff",
-    padding: 10,
-    borderRadius: 6,
-    border: "none",
-    fontWeight: "bold",
-  },
-  listItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "8px 0",
-    borderBottom: "1px solid #eee",
-  },
-  delete: {
-    background: "#e74c3c",
-    color: "#fff",
-    border: "none",
-    padding: "6px 10px",
-    borderRadius: 6,
-  },
-};
