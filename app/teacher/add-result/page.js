@@ -7,27 +7,34 @@ export default function AddResult() {
   const [subject, setSubject] = useState("");
   const [marks, setMarks] = useState("");
 
-  const handleSave = () => {
+  const handleAdd = () => {
     if (!roll || !subject || !marks) {
       alert("All fields required");
       return;
     }
 
-    const existing = JSON.parse(localStorage.getItem("results")) || [];
+    let results = JSON.parse(localStorage.getItem("results")) || [];
 
-    existing.push({
-      roll,
-      name,
+    let student = results.find((r) => r.roll === roll);
+
+    if (!student) {
+      student = {
+        roll,
+        name,
+        subjects: [],
+      };
+      results.push(student);
+    }
+
+    student.subjects.push({
       subject,
       marks,
     });
 
-    localStorage.setItem("results", JSON.stringify(existing));
+    localStorage.setItem("results", JSON.stringify(results));
 
-    alert("Result Saved Successfully ✅");
+    alert("Subject Added ✅");
 
-    setRoll("");
-    setName("");
     setSubject("");
     setMarks("");
   };
@@ -67,10 +74,10 @@ export default function AddResult() {
       />
 
       <button
-        onClick={handleSave}
+        onClick={handleAdd}
         className="bg-green-700 text-white w-full p-3 rounded"
       >
-        Save Result
+        Add Subject
       </button>
     </div>
   );
