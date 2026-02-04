@@ -1,16 +1,10 @@
 [
   {
     "username": "teacher1",
-    "password": "123456",
-    "name": "Masud Rana Babu",
-    "subject": "Programming"
-  }
-]
-[
+    "password": "123456"
+  },
   {
     "username": "teacher2",
-    "password": "123456",
-    "name": "Robiul Awowal",
-    "subject": "Java"
+    "password": "654321"
   }
 ]
