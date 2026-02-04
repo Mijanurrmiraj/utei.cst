@@ -10,16 +10,12 @@ export default function SuperAdminDashboard() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (!localStorage.getItem("superAdminLogin")) {
-      router.push("/super-admin/login");
-    }
-    loadAdmins();
-  }, []);
+    const ok = localStorage.getItem("superAdminLogin");
+    if (!ok) router.push("/super-admin/login");
 
-  const loadAdmins = () => {
-    const data = JSON.parse(localStorage.getItem("officeAdmins")) || [];
-    setAdmins(data);
-  };
+    const saved = JSON.parse(localStorage.getItem("officeAdmins")) || [];
+    setAdmins(saved);
+  }, []);
 
   const addAdmin = () => {
     if (!username || !password) {
@@ -28,16 +24,16 @@ export default function SuperAdminDashboard() {
     }
 
     const updated = [...admins, { username, password }];
-    localStorage.setItem("officeAdmins", JSON.stringify(updated));
     setAdmins(updated);
+    localStorage.setItem("officeAdmins", JSON.stringify(updated));
     setUsername("");
     setPassword("");
   };
 
-  const deleteAdmin = (u) => {
-    const filtered = admins.filter(a => a.username !== u);
-    localStorage.setItem("officeAdmins", JSON.stringify(filtered));
-    setAdmins(filtered);
+  const deleteAdmin = (index) => {
+    const updated = admins.filter((_, i) => i !== index);
+    setAdmins(updated);
+    localStorage.setItem("officeAdmins", JSON.stringify(updated));
   };
 
   const logout = () => {
@@ -47,55 +43,54 @@ export default function SuperAdminDashboard() {
 
   return (
     <div style={styles.page}>
-      
-      {/* HEADER */}
-      <div style={styles.headerCard}>
-        <h2 style={{ margin: 0 }}>Super Admin Dashboard</h2>
-        <p style={{ margin: "6px 0", opacity: 0.9 }}>
-          Full system control panel
-        </p>
-        <button onClick={logout} style={styles.logoutBtn}>Logout</button>
+      <div style={styles.header}>
+        <div>
+          <h2>Super Admin Dashboard</h2>
+          <p>Full system control panel</p>
+        </div>
+        <button onClick={logout} style={styles.logout}>Logout</button>
       </div>
 
-      {/* CREATE ADMIN */}
-      <div style={styles.card}>
+      {/* Summary Cards */}
+      <div style={styles.cards}>
+        <Card title="Office Admins" value={admins.length} />
+        <Card title="Teachers" value="—" />
+        <Card title="Students" value="—" />
+      </div>
+
+      {/* Create Admin */}
+      <div style={styles.section}>
         <h3>Create Office Admin</h3>
-
-        <input
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-
-        <input
-          style={styles.input}
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-
-        <button onClick={addAdmin} style={styles.primaryBtn}>
-          Add Office Admin
-        </button>
+        <div style={styles.form}>
+          <input
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={styles.input}
+          />
+          <input
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={styles.input}
+          />
+          <button onClick={addAdmin} style={styles.btn}>Add Admin</button>
+        </div>
       </div>
 
-      {/* ADMIN LIST */}
-      <div style={styles.card}>
+      {/* Admin List */}
+      <div style={styles.section}>
         <h3>Office Admin List</h3>
 
         {admins.length === 0 && (
-          <p style={{ opacity: 0.6 }}>No office admin created</p>
+          <p style={{ color: "#777" }}>No office admin created yet.</p>
         )}
 
         {admins.map((a, i) => (
           <div key={i} style={styles.listItem}>
             <span>{a.username}</span>
-            <button
-              onClick={() => deleteAdmin(a.username)}
-              style={styles.deleteBtn}
-            >
+            <button onClick={() => deleteAdmin(i)} style={styles.delete}>
               Delete
             </button>
           </div>
@@ -105,77 +100,88 @@ export default function SuperAdminDashboard() {
   );
 }
 
-/* 🎨 STYLES */
+function Card({ title, value }) {
+  return (
+    <div style={styles.card}>
+      <h4>{title}</h4>
+      <p>{value}</p>
+    </div>
+  );
+}
+
 const styles = {
   page: {
     padding: 16,
-    maxWidth: 600,
-    margin: "0 auto",
-    fontFamily: "system-ui",
+    background: "#f4f7f6",
+    minHeight: "100vh",
   },
-
-  headerCard: {
+  header: {
     background: "#1b7f3a",
     color: "#fff",
-    padding: 20,
+    padding: 16,
     borderRadius: 12,
-    marginBottom: 20,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-
-  logoutBtn: {
-    marginTop: 10,
+  logout: {
     background: "#fff",
     color: "#1b7f3a",
     border: "none",
-    padding: "8px 16px",
+    padding: "8px 14px",
     borderRadius: 6,
-    cursor: "pointer",
     fontWeight: "bold",
   },
-
+  cards: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+    gap: 12,
+    marginTop: 16,
+  },
   card: {
     background: "#fff",
     padding: 16,
-    borderRadius: 12,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-    marginBottom: 20,
+    borderRadius: 10,
+    textAlign: "center",
+    boxShadow: "0 4px 10px rgba(0,0,0,.08)",
   },
-
-  input: {
-    width: "100%",
-    padding: 10,
+  section: {
+    background: "#fff",
+    marginTop: 20,
+    padding: 16,
+    borderRadius: 12,
+    boxShadow: "0 4px 10px rgba(0,0,0,.06)",
+  },
+  form: {
+    display: "grid",
+    gap: 10,
     marginTop: 10,
+  },
+  input: {
+    padding: 10,
     borderRadius: 6,
     border: "1px solid #ccc",
-    fontSize: 16,
   },
-
-  primaryBtn: {
-    marginTop: 12,
-    width: "100%",
+  btn: {
     background: "#1b7f3a",
     color: "#fff",
-    border: "none",
-    padding: 12,
+    padding: 10,
     borderRadius: 6,
-    fontSize: 16,
-    cursor: "pointer",
+    border: "none",
+    fontWeight: "bold",
   },
-
   listItem: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "10px 0",
+    padding: "8px 0",
     borderBottom: "1px solid #eee",
   },
-
-  deleteBtn: {
+  delete: {
     background: "#e74c3c",
     color: "#fff",
     border: "none",
-    padding: "6px 12px",
+    padding: "6px 10px",
     borderRadius: 6,
-    cursor: "pointer",
   },
 };
