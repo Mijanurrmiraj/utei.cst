@@ -3,59 +3,45 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function OfficeAdminLogin() {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleLogin = () => {
-    const admins =
-      JSON.parse(localStorage.getItem("officeAdmins")) || [];
+  const handleLogin = async () => {
+    const res = await fetch("/data/officeAdmins.json");
+    const admins = await res.json();
 
-    const found = admins.find(
-      (a) => a.username === username && a.password === password
+    const valid = admins.find(
+      a => a.username === username && a.password === password
     );
 
-    if (!found) {
+    if (!valid) {
       alert("Invalid Office Admin credentials");
       return;
     }
 
-    localStorage.setItem(
-      "officeAdmin",
-      JSON.stringify(found)
-    );
+    sessionStorage.setItem("officeAdmin", username);
     router.push("/office-admin/dashboard");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded-xl shadow w-full max-w-sm">
-        <h2 className="text-center text-green-700 font-bold text-xl mb-4">
-          Office Admin Login
-        </h2>
+    <div className="login-box">
+      <h2>Office Admin Login</h2>
 
-        <input
-          className="w-full border p-2 rounded mb-3"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+      <input
+        placeholder="Username"
+        value={username}
+        onChange={e => setUsername(e.target.value)}
+      />
 
-        <input
-          type="password"
-          className="w-full border p-2 rounded mb-4"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-green-700 text-white py-2 rounded"
-        >
-          Login
-        </button>
-      </div>
+      <button onClick={handleLogin}>Login</button>
     </div>
   );
 }
