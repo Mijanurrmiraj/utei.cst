@@ -1,5 +1,4 @@
 "use client";
-i"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,23 +9,25 @@ export default function TeacherLogin() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      alert("Username and password required");
-      return;
-    }
+    try {
+      const res = await fetch("/data/teachers.json");
+      const teachers = await res.json();
 
-    const res = await fetch("/data/teachers.json");
-    const teachers = await res.json();
+      const user = teachers.find(
+        (t) =>
+          t.username === username &&
+          t.password === password
+      );
 
-    const user = teachers.find(
-      (t) => t.username === username && t.password === password
-    );
-
-    if (user) {
-      alert("Login successful");
-      router.push("/teacher/dashboard");
-    } else {
-      alert("Invalid username or password");
+      if (user) {
+        alert("Login successful");
+        router.push("/teacher/dashboard");
+      } else {
+        alert("Invalid username or password");
+      }
+    } catch (err) {
+      alert("Error loading teacher data");
+      console.error(err);
     }
   };
 
