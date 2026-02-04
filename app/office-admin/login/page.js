@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -16,77 +15,47 @@ export default function OfficeAdminLogin() {
       (a) => a.username === username && a.password === password
     );
 
-    if (found) {
-      localStorage.setItem(
-        "officeAdminLogin",
-        JSON.stringify(found)
-      );
-      router.push("/office-admin/dashboard");
-    } else {
+    if (!found) {
       alert("Invalid Office Admin credentials");
+      return;
     }
+
+    localStorage.setItem(
+      "officeAdmin",
+      JSON.stringify(found)
+    );
+    router.push("/office-admin/dashboard");
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <h2 style={{ color: "#1b7f3a" }}>Office Admin Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white p-6 rounded-xl shadow w-full max-w-sm">
+        <h2 className="text-center text-green-700 font-bold text-xl mb-4">
+          Office Admin Login
+        </h2>
 
         <input
-          style={styles.input}
+          className="w-full border p-2 rounded mb-3"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
-          style={styles.input}
           type="password"
+          className="w-full border p-2 rounded mb-4"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button style={styles.btn} onClick={handleLogin}>
+        <button
+          onClick={handleLogin}
+          className="w-full bg-green-700 text-white py-2 rounded"
+        >
           Login
         </button>
       </div>
     </div>
   );
 }
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#f4f6f5",
-  },
-  card: {
-    width: "100%",
-    maxWidth: 360,
-    padding: 20,
-    background: "#fff",
-    borderRadius: 12,
-    boxShadow: "0 8px 20px rgba(0,0,0,.1)",
-  },
-  input: {
-    width: "100%",
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 6,
-    border: "1px solid #ccc",
-  },
-  btn: {
-    width: "100%",
-    marginTop: 15,
-    padding: 12,
-    background: "#1b7f3a",
-    color: "#fff",
-    border: "none",
-    borderRadius: 6,
-    fontSize: 16,
-    cursor: "pointer",
-  },
-};
