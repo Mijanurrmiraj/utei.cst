@@ -7,58 +7,76 @@ export default function SuperAdminLogin() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleLogin = async () => {
-    try {
-      const res = await fetch("/data/superAdmin.json");
-      const admin = await res.json();
-
-      if (
-        username === admin.username &&
-        password === admin.password
-      ) {
-        localStorage.setItem("superAdminLogin", "true");
-        router.push("/super-admin/dashboard");
-      } else {
-        setError("Invalid username or password");
-      }
-    } catch (err) {
-      setError("Login error");
+  const login = () => {
+    if (username === "admin" && password === "admin123") {
+      localStorage.setItem("superAdminLogin", "true");
+      router.push("/super-admin/dashboard");
+    } else {
+      alert("Invalid Super Admin credentials");
     }
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 400, margin: "auto" }}>
-      <h2>Super Admin Login</h2>
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h2 style={{ color: "#1b7f3a" }}>Super Admin Login</h2>
 
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ width: "100%", marginBottom: 10, padding: 8 }}
-      />
+        <input
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", marginBottom: 10, padding: 8 }}
-      />
+        <input
+          style={styles.input}
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button
-        onClick={handleLogin}
-        style={{ width: "100%", padding: 10 }}
-      >
-        Login
-      </button>
-
-      {error && (
-        <p style={{ color: "red", marginTop: 10 }}>
-          {error}
-        </p>
-      )}
+        <button style={styles.btn} onClick={login}>
+          Login
+        </button>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#f4f6f5",
+  },
+  card: {
+    width: "100%",
+    maxWidth: 350,
+    padding: 20,
+    background: "#fff",
+    borderRadius: 12,
+    boxShadow: "0 8px 20px rgba(0,0,0,.1)",
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 6,
+    border: "1px solid #ccc",
+  },
+  btn: {
+    width: "100%",
+    marginTop: 15,
+    padding: 12,
+    background: "#1b7f3a",
+    color: "#fff",
+    border: "none",
+    borderRadius: 6,
+    fontSize: 16,
+    cursor: "pointer",
+  },
+};
