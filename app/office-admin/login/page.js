@@ -7,13 +7,26 @@ export default function OfficeAdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // DEMO credentials (JSON based)
-    if (username === "office" && password === "1234") {
-      localStorage.setItem("officeAdminLoggedIn", "true");
-      router.push("/office-admin/dashboard");
-    } else {
-      alert("Invalid Office Admin credentials");
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("/data/officeAdmins.json");
+      const admins = await res.json();
+
+      const found = admins.find(
+        (admin) =>
+          admin.username === username && admin.password === password
+      );
+
+      if (found) {
+        localStorage.setItem("officeAdminLoggedIn", "true");
+        localStorage.setItem("officeAdminUser", username);
+        router.push("/office-admin/dashboard");
+      } else {
+        alert("Invalid Office Admin credentials");
+      }
+    } catch (err) {
+      alert("Error loading admin data");
+      console.error(err);
     }
   };
 
@@ -49,39 +62,37 @@ const styles = {
   wrapper: {
     minHeight: "100vh",
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    background: "linear-gradient(135deg, #0f5132, #198754)",
+    alignItems: "center",
+    background: "linear-gradient(135deg,#0f5132,#198754)",
   },
   card: {
     background: "#fff",
-    padding: "30px",
-    borderRadius: "14px",
-    width: "100%",
-    maxWidth: "360px",
-    boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+    padding: 30,
+    borderRadius: 14,
+    width: 360,
+    boxShadow: "0 20px 40px rgba(0,0,0,.25)",
   },
   title: {
     textAlign: "center",
-    marginBottom: "20px",
     color: "#0f5132",
+    marginBottom: 20,
   },
   input: {
     width: "100%",
-    padding: "12px",
-    marginBottom: "14px",
-    borderRadius: "8px",
+    padding: 12,
+    marginBottom: 14,
+    borderRadius: 8,
     border: "1px solid #ccc",
-    fontSize: "15px",
   },
   button: {
     width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
+    padding: 12,
+    borderRadius: 8,
     border: "none",
     background: "#198754",
     color: "#fff",
-    fontSize: "16px",
+    fontSize: 16,
     cursor: "pointer",
   },
 };
