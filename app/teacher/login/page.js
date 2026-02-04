@@ -43,12 +43,13 @@ export default function TeacherLogin() {
         onChange={e => setPassword(e.target.value)}
       />
 
-      <button
-        onClick={login}
-        className="bg-green-700 text-white px-4 py-2 rounded w-full"
-      >
-        Login
-      </button>
+     <button
+  type="button"
+  onClick={() => alert("Clicked")}
+  className="bg-green-700 text-white w-full py-3 rounded"
+>
+  Login
+</button>
 
       {error && <p className="text-red-600 mt-3">{error}</p>}
     </div>
