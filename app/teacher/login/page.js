@@ -1,57 +1,64 @@
 "use client";
+i"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function TeacherLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const router = useRouter();
 
-  const login = async () => {
+  const handleLogin = async () => {
+    if (!username || !password) {
+      alert("Username and password required");
+      return;
+    }
+
     const res = await fetch("/data/teachers.json");
     const teachers = await res.json();
 
-    const found = teachers.find(
-      t => t.username === username && t.password === password
+    const user = teachers.find(
+      (t) => t.username === username && t.password === password
     );
 
-    if (!found) {
-      setError("Invalid username or password");
-    } else {
-      localStorage.setItem("teacher", JSON.stringify(found));
+    if (user) {
+      alert("Login successful");
       router.push("/teacher/dashboard");
+    } else {
+      alert("Invalid username or password");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto py-10">
-      <h2 className="text-2xl font-bold text-green-700 mb-4">
+    <div className="max-w-md mx-auto mt-10 p-4">
+      <h1 className="text-2xl font-bold text-green-700 mb-4">
         Teacher Login
-      </h2>
+      </h1>
 
       <input
-        className="border p-2 w-full mb-3"
+        type="text"
         placeholder="Username"
-        onChange={e => setUsername(e.target.value)}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="w-full border p-3 mb-3"
       />
 
       <input
-        className="border p-2 w-full mb-3"
         type="password"
         placeholder="Password"
-        onChange={e => setPassword(e.target.value)}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="w-full border p-3 mb-4"
       />
 
-     <button
-  type="button"
-  onClick={() => alert("Clicked")}
-  className="bg-green-700 text-white w-full py-3 rounded"
->
-  Login
-</button>
-
-      {error && <p className="text-red-600 mt-3">{error}</p>}
+      <button
+        type="button"
+        onClick={handleLogin}
+        className="bg-green-700 text-white w-full py-3 rounded"
+      >
+        Login
+      </button>
     </div>
   );
 }
