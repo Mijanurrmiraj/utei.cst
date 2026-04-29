@@ -20,8 +20,8 @@ export default function TeachersPage() {
     },
      {
       name: "Rubel islam",
-      designation: "Instructor non tech",
-      qualification: "Bsc in CSE",
+      designation: "Instructor",
+      qualification: "Bsc in EEE",
       image: "/teachers/teacher4.jpg",
     },
   ];
