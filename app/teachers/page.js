@@ -7,16 +7,22 @@ export default function TeachersPage() {
       image: "/teachers/teacher1.jpg",
     },
     {
-      name: "Engr. Robiul Islam",
+      name: "Torun Roy",
       designation: "Instructor (Computer)",
       qualification: "BSC in CSE",
       image: "/teachers/teacher2.jpg",
     },
     {
-      name: "Ms. Nusrat Jahan",
-      designation: "Junior Instructor",
-      qualification: "Diploma in CSE",
+      name: "Mst Popi",
+      designation: "Instructor (non tech)",
+      qualification: "",
       image: "/teachers/teacher3.jpg",
+    },
+     {
+      name: "Rubel islam",
+      designation: "Instructor non tech",
+      qualification: "Bsc in CSE",
+      image: "/teachers/teacher4.jpg",
     },
   ];
 
