@@ -1,114 +1,63 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function OfficeAdminStudents() {
+export default function StudentsPage() {
+  const [name, setName] = useState("");
+  const [roll, setRoll] = useState("");
+  const [batch, setBatch] = useState("");
+  const [file, setFile] = useState(null);
   const [students, setStudents] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    roll: "",
-    batch: "",
-    photo: "",
-  });
 
-  // load students
-  useEffect(() => {
-    fetch("/data/students.json")
-      .then(res => res.json())
-      .then(data => setStudents(data || []));
-  }, []);
+  const handleAddStudent = async () => {
+    if (!file) return alert("Image select করো");
 
-  const handleAdd = () => {
-    if (!form.name || !form.roll) {
-      alert("Name & Roll required");
-      return;
-    }
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "YOUR_UPLOAD_PRESET");
 
-    const updated = [...students, form];
-    setStudents(updated);
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
 
-    alert("Student added (local preview)");
-    setForm({ name: "", roll: "", batch: "", photo: "" });
-  };
+    const result = await res.json();
 
-  const handleDelete = (roll) => {
-    const filtered = students.filter(s => s.roll !== roll);
-    setStudents(filtered);
-    alert("Student deleted (local preview)");
+    const newStudent = {
+      name,
+      roll,
+      batch,
+      photo: result.secure_url,
+    };
+
+    setStudents([...students, newStudent]);
+
+    setName("");
+    setRoll("");
+    setBatch("");
+    setFile(null);
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold text-green-700 mb-4">
-        Students Management
-      </h1>
+    <div style={{ padding: "20px" }}>
+      <h2>Students Management</h2>
 
-      {/* Add student */}
-      <div className="bg-white shadow rounded p-4 mb-6">
-        <h2 className="font-semibold mb-3">Add Student</h2>
+      <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+      <input placeholder="Roll" onChange={(e) => setRoll(e.target.value)} />
+      <input placeholder="Batch" onChange={(e) => setBatch(e.target.value)} />
 
-        <input
-          placeholder="Student Name"
-          className="input"
-          value={form.name}
-          onChange={e => setForm({ ...form, name: e.target.value })}
-        />
+      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
 
-        <input
-          placeholder="Roll No"
-          className="input"
-          value={form.roll}
-          onChange={e => setForm({ ...form, roll: e.target.value })}
-        />
+      <button onClick={handleAddStudent}>Add Student</button>
 
-        <input
-          placeholder="Batch"
-          className="input"
-          value={form.batch}
-          onChange={e => setForm({ ...form, batch: e.target.value })}
-        />
-
-        <input
-          placeholder="Photo URL"
-          className="input"
-          value={form.photo}
-          onChange={e => setForm({ ...form, photo: e.target.value })}
-        />
-
-        <button
-          onClick={handleAdd}
-          className="bg-green-700 text-white px-4 py-2 rounded mt-2"
-        >
-          Add Student
-        </button>
-      </div>
-
-      {/* Student list */}
-      <div className="bg-white shadow rounded p-4">
-        <h2 className="font-semibold mb-3">Student List</h2>
-
-        {students.length === 0 && (
-          <p className="text-gray-500">No students added yet</p>
-        )}
-
+      <div>
         {students.map((s, i) => (
-          <div
-            key={i}
-            className="flex justify-between items-center border-b py-2"
-          >
-            <div>
-              <p className="font-semibold">{s.name}</p>
-              <p className="text-sm text-gray-600">
-                Roll: {s.roll} | Batch: {s.batch}
-              </p>
-            </div>
-
-            <button
-              onClick={() => handleDelete(s.roll)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
+          <div key={i}>
+            <img src={s.photo} width="120" />
+            <h3>{s.name}</h3>
           </div>
         ))}
       </div>
